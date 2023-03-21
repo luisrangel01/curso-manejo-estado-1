@@ -3,40 +3,66 @@ import React from "react";
 const SECURITY_CODE = "paradigma";
 
 function UseState({ name }) {
-  const [state, setState] = React.useState({
+  const initialState = {
     value: "",
     error: false,
     loading: false,
     deleted: false,
     confirmed: false,
-  });
+  }
+
+  const [state, setState] = React.useState(initialState);
+
+  const onConfirm = () => {
+    setState({
+      ...state,
+      error: false,
+      loading: false,
+      confirmed: true,
+      deleted: false,
+    });
+  };
+
+  const onError = () => {
+    setState({
+      ...state,
+      error: true,
+      loading: false,
+      confirmed: false,
+      deleted: false,
+    });
+  };
+
+  const onWrite = (newValue) => {
+    setState({ ...state, value: newValue });
+  };
+
+  const onCheck = () => {
+    setState({ ...state, loading: true });
+  };
+
+  const onDelete = () => {
+    setState({ ...state, deleted: true });
+  };
+
+  const onCancel = () => {
+    setState({ ...state, confirmed: false });
+  };
+
+  const onReset = ()=> {
+    setState(initialState)
+  }
 
   React.useEffect(() => {
-    console.log("empezando el efecto");
     if (state.loading) {
       setTimeout(() => {
-        console.log(`haciendo la validacion`);
         if (state.value !== SECURITY_CODE) {
-          setState({
-            ...state,
-            error: true,
-            loading: false,
-            confirmed: false,
-            deleted: false,
-          });
+          onError();
         } else {
-          setState({
-            ...state,
-            error: false,
-            loading: false,
-            confirmed: true,
-            deleted: false,
-          });
+          onConfirm();
         }
-        console.log(`terminando la validacion`);
       }, 3000);
     }
-    console.log("terminando el efecto");
   }, [state.loading]);
 
   if (!state.deleted && !state.confirmed) {
@@ -50,14 +76,14 @@ function UseState({ name }) {
           placeholder="Código de seguridad"
           value={state.value}
           onChange={(event) => {
-            setState({ ...state, value: event.target.value });
+            onWrite(event.target.value);
           }}
           disabled={state.loading}
         />
         <button
           disabled={state.loading}
           onClick={() => {
-            setState({ ...state, loading: true });
+            onCheck();
           }}
         >
           Comprobar
@@ -70,14 +96,14 @@ function UseState({ name }) {
         <p>Estas seguro que quieres eliminar?</p>
         <button
           onClick={() => {
-            setState({ ...state, deleted: true });
+            onDelete();
           }}
         >
           Si, eliminar
         </button>
         <button
           onClick={() => {
-            setState({ ...state, confirmed: false });
+            onCancel();
           }}
         >
           No
@@ -90,7 +116,7 @@ function UseState({ name }) {
         <p>Eliminado con exito</p>
         <button
           onClick={() => {
-            setState({ ...state, value: "", confirmed: false, deleted: false });
+            onReset();
           }}
         >
           Recupera UseState
