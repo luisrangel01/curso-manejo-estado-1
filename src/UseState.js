@@ -8,45 +8,41 @@ function UseState({ name }) {
     error: false,
     loading: false,
   });
-  const [value, setValue] = React.useState("");
-  const [error, setError] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     console.log("empezando el efecto");
-    if (loading) {
+    if (state.loading) {
       setTimeout(() => {
         console.log(`haciendo la validacion`);
-        if (value !== SECURITY_CODE) {
-          setError(true);
+        if (state.value !== SECURITY_CODE) {
+          setState({ ...state, error: true, loading: false });
+        } else {
+          setState({ ...state, error: false, loading: false });
         }
-        setLoading(false);
         console.log(`terminando la validacion`);
       }, 3000);
     }
     console.log("terminando el efecto");
-  }, [loading]);
+  }, [state.loading]);
 
   return (
     <div>
       <h2>Eliminar {name}</h2>
       <p>Por favor, escriba el código de seguridad.</p>
-      {error && !loading && <p>Error: el código es incorrecto</p>}
-      {loading && <p>Cargando...</p>}
+      {state.error && !state.loading && <p>Error: el código es incorrecto</p>}
+      {state.loading && <p>Cargando...</p>}
       <input
         placeholder="Código de seguridad"
-        value={value}
+        value={state.value}
         onChange={(event) => {
-          // setError(false);
-          setValue(event.target.value);
+          setState({ ...state, value: event.target.value });
         }}
-        disabled={loading}
+        disabled={state.loading}
       />
       <button
-        disabled={loading}
+        disabled={state.loading}
         onClick={() => {
-          // setError(false);
-          setLoading((prevState) => !prevState);
+          setState({ ...state, loading: true });
         }}
       >
         Comprobar
