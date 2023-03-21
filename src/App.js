@@ -6,6 +6,7 @@ function App() {
   return (
     <div className="App">
       <UseState name="UseState" />
+      <hr />
       <ClassState name="ClassState" />
     </div>
   );
