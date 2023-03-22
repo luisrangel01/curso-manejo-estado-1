@@ -31,9 +31,10 @@ function UseReducer({ name }) {
     dispatch({ type: actionTypes.cancel });
   };
 
-  const onReset = () => {
-    dispatch({ type: actionTypes.reset });
-  };
+  //   const onReset = () => {
+  //     dispatch({ type: actionTypes.reset });
+  //   };
+  const onReset = () => dispatch({ type: actionTypes.reset });
 
   React.useEffect(() => {
     if (state.loading) {
@@ -96,13 +97,7 @@ function UseReducer({ name }) {
     return (
       <React.Fragment>
         <p>Eliminado con exito</p>
-        <button
-          onClick={() => {
-            onReset();
-          }}
-        >
-          Recupera Estado Inicial
-        </button>
+        <button onClick={onReset}>Recupera Estado Inicial</button>
       </React.Fragment>
     );
   }
