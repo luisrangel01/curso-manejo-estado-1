@@ -1,13 +1,15 @@
 import "./App.css";
 import { UseState } from "./UseState.js";
+import { UseReducer } from "./UseReducer";
 import { ClassState } from "./ClassState.js";
 
 function App() {
   return (
     <div className="App">
-      <UseState name="UseState" />
+      <UseState name="Use State" />
       <hr />
-      <ClassState name="ClassState" />
+      <UseReducer name="Use Reducer" />
+      {/* <ClassState name="Class State" /> */}
     </div>
   );
 }
