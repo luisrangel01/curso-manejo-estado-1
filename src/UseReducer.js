@@ -5,13 +5,43 @@ const SECURITY_CODE = "paradigma";
 function UseReducer({ name }) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
+  // action creators:
+
+  const onConfirm = () => {
+    dispatch({ type: actionTypes.confirm });
+  };
+
+  const onError = () => {
+    dispatch({ type: actionTypes.error });
+  };
+
+  const onWrite = (newValue) => {
+    dispatch({ type: actionTypes.write, payload: newValue });
+  };
+
+  const onCheck = () => {
+    dispatch({ type: actionTypes.check });
+  };
+
+  const onDelete = () => {
+    dispatch({ type: actionTypes.delete });
+  };
+
+  const onCancel = () => {
+    dispatch({ type: actionTypes.cancel });
+  };
+
+  const onReset = () => {
+    dispatch({ type: actionTypes.reset });
+  };
+
   React.useEffect(() => {
     if (state.loading) {
       setTimeout(() => {
         if (state.value !== SECURITY_CODE) {
-          dispatch({ type: actionTypes.error });
+          onError();
         } else {
-          dispatch({ type: actionTypes.confirm });
+          onConfirm();
         }
       }, 3000);
     }
@@ -28,14 +58,14 @@ function UseReducer({ name }) {
           placeholder="Código de seguridad"
           value={state.value}
           onChange={(event) => {
-            dispatch({ type: actionTypes.write, payload: event.target.value });
+            onWrite(event.target.value);
           }}
           disabled={state.loading}
         />
         <button
           disabled={state.loading}
           onClick={() => {
-            dispatch({ type: actionTypes.check });
+            onCheck();
           }}
         >
           Comprobar
@@ -48,14 +78,14 @@ function UseReducer({ name }) {
         <p>Estas seguro que quieres eliminar?</p>
         <button
           onClick={() => {
-            dispatch({ type: actionTypes.delete });
+            onDelete();
           }}
         >
           Si, eliminar
         </button>
         <button
           onClick={() => {
-            dispatch({ type: actionTypes.cancel });
+            onCancel();
           }}
         >
           No
@@ -68,7 +98,7 @@ function UseReducer({ name }) {
         <p>Eliminado con exito</p>
         <button
           onClick={() => {
-            dispatch({ type: actionTypes.reset });
+            onReset();
           }}
         >
           Recupera Estado Inicial
